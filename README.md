@@ -5,7 +5,8 @@ Trigger a notification based on the users battery level.
 
 ## Options
 - "batteryLevel" (Integer): Battery level to trigger alert
-- "messageTxt" (String): Text within the message
+- "title" (String): Text within the message
+- "message" (String): Text within the message
 - "useDefaultMsg" (Bool): Usage of the default confirm/alert message (true = native message)
 - "storeChoice" (String): Retain choice by user when they choose accept or cancel (choices = "confirm", "cancel", "all")
 

@@ -1,0 +1,42 @@
+<html>
+<head>
+    <title>Battery Callback Demo</title>
+
+    <style>
+        .box {
+            background: grey;
+            padding: 10px;
+            margin: 0 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <button class="js-embed">Embed </button>
+    </div>
+
+    <div class="box">
+        <button class="js-embed">Embed </button>
+    </div>
+
+    <script src="battery-callback.js"></script>
+
+    <script>
+
+        var element = document.querySelectorAll('.js-embed');
+        for (var i = 0; i < element.length; ++i) {
+            element[i].addEventListener('click', embedContent , false);
+        }
+
+        var AppBatteryCallback = new BatteryCallback({
+            "batteryThreshold": 0.2
+        });
+
+        function embedContent(){
+            AppBatteryCallback.checkBattery(function(){
+                alert(this);
+            }, this);
+        }
+    </script>
+</body>
+</html>
