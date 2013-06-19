@@ -1,14 +1,22 @@
+/**
+ * Battery Callback Plugin
+ * TODO - Find intro format
+ * @param  {obj} opts [Settings for the plugin]
+ * @return {obj}      [Constructed object]
+ */
+
 var BatteryCallback = function(opts) {
 
     this.BatteryManager = window.navigator.battery;
 
-    this.settings = {
+    this.settings = { // TODO - how do we pass options in without removing some?
         "batteryThreshold": 0.5,
-        "title": "",
-        "message": "",
-        "useNativeAlert": false,
-        "storeInput": "all",
-        "executeOnFailure": true
+        "title": "", // TODO
+        "message": "", // TODO
+        "useNativeAlert": false, // TODO
+        "storeInput": true,
+        "executeOnFailure": true,
+        "isWarningTriggered": false
     };
 
     // This is just for dekstop testing
@@ -23,45 +31,57 @@ var BatteryCallback = function(opts) {
     return this;
 };
 
+/**
+ * Check the battery and conduct behaviour as required
+ * @param  {Function} callback [The desired executable code]
+ * @param  {Node}     node     [The node in which the plugin can used to constuct the message]
+ */
 BatteryCallback.prototype.checkBattery = function( callback, node ){
     this.callback = callback || '';
 
     if(this.BatteryManager){
 
-        console.log('Battery status API is supported');
-        if(this.BatteryManager.charging || this.storedChoice === 'confirm'){
+        // Battery status API is supported
+        if(this.BatteryManager.charging || this.getChoiceStored() === 'confirm'){
 
-            console.log('Status: Charging');
+            // If device is charging or a user has previously confirmed then execute callback
             this.executeCallback();
+
+            return false;
         }else{
 
-            console.log('Checking battery level');
+            // Checking battery level
             var currentLevel = this.BatteryManager.level;
-
             if(currentLevel < this.settings.batteryThreshold){
 
-                console.log('Status: Low - Create Message');
+                // Battery Status - Low - Create Warning Message
                 this.createMessage( node );
 
             }else{
 
-                console.log('Execute code: above threshold');
+                // Execute code: above threshold
                 this.executeCallback();
             }
         }
+
     }else{
 
-        console.log('Battery status API is not supported');
+        // Battery status API is not supported
         if(this.settings.executeOnFailure){
 
-            console.log('Execute code anyway');
             this.executeCallback();
+
         }
     }
 };
 
+/**
+ * Create warning message (includes a title, message and buttons)
+ * @param  {object} obj [A node object to append the message HTML to]
+ */
 BatteryCallback.prototype.createMessage = function( obj ){
 
+    this.destroyMessage();
     var baseClass = "batcallback";
 
     var messageWrapper = document.createElement("div");
@@ -93,16 +113,23 @@ BatteryCallback.prototype.createMessage = function( obj ){
     this.uievents(messageWrapper);
 };
 
-BatteryCallback.prototype.destroyMessage = function( obj ){
+/**
+ * Destory / Delete the warning messages
+ */
+BatteryCallback.prototype.destroyMessage = function(){
 
     console.log('Destroy Message');
-    var boo = document.querySelectorAll('.batcallback');
+    var messages = document.querySelectorAll('.batcallback');
 
-    for (var i = 0; i < boo.length; ++i) {
-        boo[i].innerHTML = '';
+    for (var i = 0; i < messages.length; ++i) {
+        messages[i].parentNode.removeChild(messages[i]);
     }
 };
 
+/**
+ * Binding UI Events
+ * @param  {object} obj [A node object to better identify the buttons required for binding using 'querySelectorAll']
+ */
 BatteryCallback.prototype.uievents = function( obj ){
 
     var _this = this,
@@ -112,16 +139,49 @@ BatteryCallback.prototype.uievents = function( obj ){
     for (var i = 0; i < confirmButton.length; ++i) {
 
         confirmButton[i].addEventListener('click', function(){
-            _this.executeCallback(_this);
+
+            _this.setChoiceStored( 'confirm', _this );
+            _this.executeCallback( _this );
         }, false);
     }
 
     for (var c = 0; c < cancelButton.length; ++c) {
 
-        cancelButton[c].addEventListener('click', _this.destroyMessage, false);
+        cancelButton[c].addEventListener('click', function(){
+
+            _this.setChoiceStored( 'cancel', _this );
+            _this.destroyMessage();
+        }, false);
     }
 };
 
+/**
+ * GET choice stored
+ * @return {string} [Returns stored choice made by the user in a previous warning message e.g. 'confirm' or 'cancel']
+ */
+BatteryCallback.prototype.getChoiceStored = function(){
+
+    if(this.settings.storeInput){
+        return localStorage.getItem('batteryCheckChoice');
+    }
+};
+
+/**
+ * SET choice stored
+ * @param  {string} userChoice ['confirm' or 'cancel' - this is saved in localStorage]
+ * @param  {object} obj        ['this' changes on event so plugin scope needed to be passed in]
+ */
+BatteryCallback.prototype.setChoiceStored = function( userChoice, obj ){
+
+    if(obj.settings.storeInput){
+        window.localStorage.setItem('batteryCheckChoice', userChoice);
+    }
+};
+
+/**
+ * Execute the callback
+ * @param  {object} obj ['this' changes on event so plugin scope needed to be passed in]
+ */
 BatteryCallback.prototype.executeCallback = function( obj ){
 
     if(obj){
@@ -131,26 +191,4 @@ BatteryCallback.prototype.executeCallback = function( obj ){
         this.callback();
         this.destroyMessage();
     }
-};
-
-
-/**
- * Storage Helper Functionality
- * -----------------------------
- */
-
-/**
- * Get Choice Stored
- */
-BatteryCallback.prototype.getChoiceStored = function(){
-
-    return localStorage.getKey('batteryCheckChoice');
-};
-
-/**
- * Set Choice Stored
- */
-BatteryCallback.prototype.setChoiceStored = function(){
-
-    this.storedChoice = 'confirmed';
 };
