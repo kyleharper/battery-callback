@@ -3,39 +3,116 @@
     <title>Battery Callback Demo</title>
 
     <style>
+        html {
+            font-family: helvetica, arial;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
         .box {
             background: grey;
             padding: 10px;
             margin: 0 0 20px;
+            position: relative;
+            min-height: 200px;
+            border-radius: 5px;
+        }
+
+        .batcallback {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            border: 1px solid grey;
+
+            background: rgba(0,0,0,.25);
+            padding: 10px;
+            border-radius: 5px;
+
+            -webkit-transition: all 0.3s ease-out;
+            -moz-transition: all 0.3s ease-out;
+            -ms-transition: all 0.3s ease-out;
+            -o-transition: all 0.3s ease-out;
+            transition: all 0.3s ease-out;
+        }
+
+        .active {
+            opacity: 1;
+        }
+
+        .batcallback--button-holder,
+        .batcallback--title {
+            margin: -10px -10px 10px;
+            padding: 10px;
+        }
+
+        .batcallback--title {
+            background: rgba(255,255,255, 0.9);
+            border-radius: 4px 4px 0 0;
+        }
+
+        .batcallback--msg {
+            margin: 0 0 10px;
+            line-height: 1.4em;
+            color: white;
+        }
+
+        .batcallback--button {
+            border: 0;
+            background: black;
+            color: white;
+            border-radius: 5px;
+            line-height: 2.5em;
+            padding: 0 10px;
         }
     </style>
 </head>
 <body>
     <div class="box">
-        <button class="js-embed">Embed </button>
+        <div id="embed-one"></div>
+        <button class="js-embed" data-embed="embed-one" data-embed-src="http://www.youtube.com">Embed </button>
     </div>
 
     <div class="box">
         <button class="js-embed">Embed </button>
     </div>
 
+    <button id="js-clear">Clear Stored </button>
+
     <script src="battery-callback.js"></script>
 
     <script>
-
         var element = document.querySelectorAll('.js-embed');
         for (var i = 0; i < element.length; ++i) {
             element[i].addEventListener('click', embedContent , false);
         }
 
+        document.getElementById('js-clear').addEventListener('click', clearStored , false);
+
         var AppBatteryCallback = new BatteryCallback({
-            "batteryThreshold": 0.2
+            "batteryThreshold": 0.2,
+            "msgTitle": "Your battery is low!",
+            "message": "It seems that your battery is quite low. Are you sure you wish view this map? If not you could always come back later.",
+            "useNativeAlert": false
         });
 
         function embedContent(){
             AppBatteryCallback.checkBattery(function(){
-                alert(this);
+                embedVideo(this);
             }, this);
+        }
+
+        function clearStored(){
+            AppBatteryCallback.clearChoiceStored();
+        }
+
+        function embedVideo(ele){
+            var container = document.getElementById(ele.getAttribute('data-embed'));
         }
     </script>
 </body>

@@ -9,14 +9,16 @@ var BatteryCallback = function(opts) {
 
     this.BatteryManager = window.navigator.battery;
 
-    this.settings = { // TODO - how do we pass options in without removing some?
-        "batteryThreshold": 0.5,
-        "title": "", // TODO
-        "message": "", // TODO
-        "useNativeAlert": false, // TODO
-        "storeInput": true,
-        "executeOnFailure": true,
-        "isWarningTriggered": false
+    this.settings = {
+        "batteryThreshold": opts.batteryThreshold || 0.5,
+        "msgTitle": opts.msgTitle || "Warning your battery is low.",
+        "message": opts.message || "If you're happy to view this content then choose continue",
+        "confirmButtonText": opts.confirmButtonText || "Confirm",
+        "cancelButtonText": opts.cancelButtonText || "Cancel",
+        "useNativeAlert": opts.useNativeAlert || false,
+        "storeInput": opts.storeInput || true,
+        "executeOnFailure": opts.executeOnFailure || true,
+        "activeDelay": opts.activeDelay || 200
     };
 
     // This is just for dekstop testing
@@ -27,7 +29,6 @@ var BatteryCallback = function(opts) {
         };
     }
 
-    this.settings = opts || this.settings;
     return this;
 };
 
@@ -41,7 +42,7 @@ BatteryCallback.prototype.checkBattery = function( callback, node ){
 
     if(this.BatteryManager){
 
-        // Battery status API is supported
+        // Battery status: API is supported
         if(this.BatteryManager.charging || this.getChoiceStored() === 'confirm'){
 
             // If device is charging or a user has previously confirmed then execute callback
@@ -54,7 +55,7 @@ BatteryCallback.prototype.checkBattery = function( callback, node ){
             var currentLevel = this.BatteryManager.level;
             if(currentLevel < this.settings.batteryThreshold){
 
-                // Battery Status - Low - Create Warning Message
+                // Battery Status: Low - Create Warning Message
                 this.createMessage( node );
 
             }else{
@@ -66,7 +67,7 @@ BatteryCallback.prototype.checkBattery = function( callback, node ){
 
     }else{
 
-        // Battery status API is not supported
+        // Battery status: API is not supported
         if(this.settings.executeOnFailure){
 
             this.executeCallback();
@@ -82,35 +83,63 @@ BatteryCallback.prototype.checkBattery = function( callback, node ){
 BatteryCallback.prototype.createMessage = function( obj ){
 
     this.destroyMessage();
-    var baseClass = "batcallback";
 
-    var messageWrapper = document.createElement("div");
-    messageWrapper.className = baseClass;
+    if(this.settings.useNativeAlert){
 
-    var title = document.createElement("h3");
-    title.className = baseClass + "--title";
+        var boo = confirm(this.settings.msgTitle + '\n\n' + this.settings.message),
+            _this = this;
 
-    var message = document.createElement("p");
-    message.className = baseClass + "--msg";
+        if(boo){
+            _this.setChoiceStored( 'confirm' );
+            _this.executeCallback( _this );
+        }else{
 
-    var confirmButton = document.createElement("button");
-    confirmButton.className = baseClass + "--button confirm";
-    confirmButton.innerText = "Confirm";
+            _this.setChoiceStored( 'cancel' );
+            if(_this.settings.executeOnFailure){
+                _this.executeCallback( _this );
+            }
+        }
+    }else{
+        var baseClass = "batcallback";
 
-    var cancelButton = document.createElement("button");
-    cancelButton.className = baseClass + "--button cancel";
-    cancelButton.innerText = "Cancel";
+        var messageWrapper = document.createElement("div");
+        messageWrapper.className = baseClass;
 
-    var elements = [title, message, confirmButton, cancelButton];
-    elements.reverse();
+        var title = document.createElement("h3");
+        title.className = baseClass + "--title";
+        title.innerText = this.settings.msgTitle;
 
-    for (var i = elements.length - 1; i >= 0; i--) {
+        var message = document.createElement("p");
+        message.className = baseClass + "--msg";
+        message.innerText = this.settings.message;
 
-        messageWrapper.appendChild(elements[i]);
+        var confirmButton = document.createElement("button");
+        confirmButton.className = baseClass + "--button confirm";
+        confirmButton.innerText = this.settings.confirmButtonText;
+
+        var cancelButton = document.createElement("button");
+        cancelButton.className = baseClass + "--button cancel";
+        cancelButton.innerText = this.settings.cancelButtonText;
+
+        var buttonHolder = document.createElement("div");
+        buttonHolder.className = baseClass + "--button-holder";
+        buttonHolder.appendChild(confirmButton);
+        buttonHolder.appendChild(cancelButton);
+
+        var elements = [title, message, buttonHolder];
+        elements.reverse();
+
+        for (var i = elements.length - 1; i >= 0; i--) {
+            messageWrapper.appendChild(elements[i]);
+        }
+
+        obj.parentNode.appendChild(messageWrapper);
+        this.uievents(messageWrapper);
+
+        window.setTimeout(function(){
+            messageWrapper.className += ' active';
+        }, this.settings.activeDelay);
     }
-
-    obj.parentNode.appendChild(messageWrapper);
-    this.uievents(messageWrapper);
 };
 
 /**
@@ -118,7 +147,6 @@ BatteryCallback.prototype.createMessage = function( obj ){
  */
 BatteryCallback.prototype.destroyMessage = function(){
 
-    console.log('Destroy Message');
     var messages = document.querySelectorAll('.batcallback');
 
     for (var i = 0; i < messages.length; ++i) {
@@ -176,6 +204,14 @@ BatteryCallback.prototype.setChoiceStored = function( userChoice, obj ){
     if(obj.settings.storeInput){
         window.localStorage.setItem('batteryCheckChoice', userChoice);
     }
+};
+
+/**
+ * CLEAR choice stored
+ */
+BatteryCallback.prototype.clearChoiceStored = function(){
+
+        window.localStorage.clear('batteryCheckChoice');
 };
 
 /**
