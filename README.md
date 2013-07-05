@@ -33,5 +33,5 @@ function yourFunction(){
 }
 
 // Just a normal click event listener
-document.getElementById('js-clear').addEventListener('click', yourFunction , false);
+document.getElementById('id').addEventListener('click', yourFunction , false);
 ```
