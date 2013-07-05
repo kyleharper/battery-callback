@@ -27,6 +27,7 @@ var AppBatteryCallback = new BatteryCallback({
 
 // A example of a function that utilises the battery callback
 function yourFunction(){
+    // Runs the "checkBattery" method
     AppBatteryCallback.checkBattery(function(){
         // RUN YOUR CODE HERE
     }, this);
