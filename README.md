@@ -35,8 +35,8 @@ function yourFunction(){
     }, this);
 }
 
-### Demo
-
 // Just a normal click event listener
 document.getElementById('id').addEventListener('click', yourFunction , false);
 ```
+
+### Demo
