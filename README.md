@@ -17,7 +17,7 @@ When conditionally loading content you may want to check if the users battery ch
 * `activeDelay` (Int) The time before a 'active' class is added to the message, which helps with animation the message if required (Default: 200)
 
 ### Methods
-* `checkBattery` (parameters: {function} callback to call, {node} The node in which is used to constuct the message) 
+* `checkBattery` (parameters: {function} callback to call, {node} The node in which is used to constuct the message)
 * `clearChoiceStored` clears user choice stored
 * `destroyMessage` destorys/removes all messages
 
@@ -45,3 +45,6 @@ document.getElementById('id').addEventListener('click', yourFunction , false);
 ```
 
 ### Demo
+You can see a demo live on ecliptik.co.uk;
+
+http://www.ecliptik.co.uk/demos/battery-callback/basic.html

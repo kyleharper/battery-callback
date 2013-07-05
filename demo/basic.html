@@ -1,0 +1,68 @@
+<html>
+<head>
+    <title>Battery Callback Demo</title>
+    <link rel="stylesheet" href="assets/core.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div>
+            <h1>Battery Callback Plugin</h1>
+            <h3>A few points to note;</h3>
+            <ul>
+                <li>You'll need to be on a mobile device to see the warning message.</li>
+                <li>For this demo I've set the 'batteryThreshold' to '1' (100%) meaning you'll always see the warning message. In real use you'd set it between 0.1 - 0.3</li>
+            </ul>
+
+            <h3>I'll add better examples very soon;</h3>
+            <ul>
+                <li>Embeding a video</li>
+                <li>Embeding a map</li>
+                <li>Embeding a interacive piece</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <div id="embed-one"></div>
+            <button class="js-embed" data-embed="embed-one" data-embed-src="http://www.youtube.com">Embed </button>
+        </div>
+
+        <div class="box">
+            <button class="js-embed">Embed </button>
+        </div>
+
+        <button id="js-clear">Clear Stored Choice</button>
+    </div>
+
+    <script src="battery-callback.js"></script>
+
+    <script>
+        var element = document.querySelectorAll('.js-embed');
+        for (var i = 0; i < element.length; ++i) {
+            element[i].addEventListener('click', embedContent , false);
+        }
+
+        document.getElementById('js-clear').addEventListener('click', clearStored , false);
+
+        var AppBatteryCallback = new BatteryCallback({
+            "batteryThreshold": 1,
+            "msgTitle": "Your battery is low!",
+            "message": "It seems that your battery is quite low. Are you sure you wish view this map? If not you could always come back later.",
+            "useNativeAlert": false
+        });
+
+        function embedContent(){
+            AppBatteryCallback.checkBattery(function(){
+                embedVideo(this);
+            }, this);
+        }
+
+        function clearStored(){
+            AppBatteryCallback.clearChoiceStored();
+        }
+
+        function embedVideo(ele){
+            alert('Run embed (e.g. a Map, Video, Game, Interactive Content (e.g. Canvas))')
+        }
+    </script>
+</body>
+</html>

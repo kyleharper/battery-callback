@@ -1,0 +1,120 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    line-height: 1.25em;
+}
+
+h1 {
+    font-size: 2em;
+    margin: 1em 0 .25em;
+    line-height: 1.25em;
+}
+
+h2 {
+    font-size: 1.25em;
+    margin: 1.5em 0 .5em;
+}
+
+p,
+ul,
+ol {
+    font-size: 0.85em;
+    margin: 0 0 1.25em;
+}
+
+ul,
+ol {
+    padding: 0 0 0 1.25em;
+}
+
+.wrapper {
+    margin: 0 auto;
+    padding: 0 20px;
+    max-width: 480px;
+}
+
+pre,
+code {
+    margin: 0;
+}
+
+table {
+    border-top: 1px solid #ccc;
+    font-size: 0.85em;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    padding: 10px 0;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    border-color: #ccc;
+}
+
+button {
+    cursor: pointer;
+}
+
+.box {
+    background: grey;
+    padding: 10px;
+    margin: 0 0 20px;
+    position: relative;
+    min-height: 180px;
+    border-radius: 5px;
+}
+
+.batcallback {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    border: 1px solid grey;
+
+    background: rgba(0,0,0,.25);
+    padding: 10px;
+    border-radius: 5px;
+
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}
+
+.active {
+    opacity: 1;
+}
+
+.batcallback--button-holder,
+.batcallback--title {
+    margin: -10px -10px 10px;
+    padding: 10px;
+}
+
+.batcallback--title {
+    background: rgba(255,255,255, 0.9);
+    border-radius: 4px 4px 0 0;
+}
+
+.batcallback--msg {
+    margin: 0 0 10px;
+    line-height: 1.4em;
+    color: white;
+}
+
+.batcallback--button {
+    border: 0;
+    background: black;
+    color: white;
+    border-radius: 5px;
+    line-height: 2.5em;
+    padding: 0 10px;
+}
