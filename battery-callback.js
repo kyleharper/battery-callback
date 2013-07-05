@@ -10,7 +10,7 @@ var BatteryCallback = function(opts) {
     this.BatteryManager = window.navigator.battery;
 
     this.settings = {
-        "batteryThreshold": opts.batteryThreshold || 0.5,
+        "batteryThreshold": opts.batteryThreshold || 0.1,
         "msgTitle": opts.msgTitle || "Warning your battery is low.",
         "message": opts.message || "If you're happy to view this content then choose continue",
         "confirmButtonText": opts.confirmButtonText || "Confirm",
