@@ -17,6 +17,11 @@ When conditionally loading content you may want to check if the users battery ch
 * `activeDelay` (Int) The time before a 'active' class is added to the message, which helps with animation the message if required (Default: 200)
 
 ### Methods
+* `checkBattery` (parameters: {function} callback to call, {node} The node in which is used to constuct the message) 
+* `clearChoiceStored` clears user choice stored
+* `destroyMessage` destorys/removes all messages
+
+There are other methods but really they shouldn't be touched. I recommend that you only stick to the three above.
 
 ### Example
 ```javascript
@@ -24,7 +29,7 @@ When conditionally loading content you may want to check if the users battery ch
 var AppBatteryCallback = new BatteryCallback({
     "batteryThreshold": 0.2,
     "msgTitle": "Your battery is low!",
-    "message": "It seems that your battery is quite low. Are you sure you wish view this content? If not you could always come back later.",
+    "message": "It seems that your battery is quite low. Are you sure you wish view this content?",
 });
 
 // A example of a function that utilises the battery callback
