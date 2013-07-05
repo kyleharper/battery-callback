@@ -16,13 +16,15 @@ When conditionally loading content you may want to check if the users battery ch
 * `executeOnFailure` (Bool) If the battery check fails (API may not be supported) then execute the functionality anyways (Default: true)
 * `activeDelay` (Int) The time before a 'active' class is added to the message, which helps with animation the message if required (Default: 200)
 
+### Methods
+
+### Example
 ```javascript
 // Construct
 var AppBatteryCallback = new BatteryCallback({
     "batteryThreshold": 0.2,
     "msgTitle": "Your battery is low!",
-    "message": "It seems that your battery is quite low. Are you sure you wish view this map? If not you could always come back later.",
-    "useNativeAlert": false
+    "message": "It seems that your battery is quite low. Are you sure you wish view this content? If not you could always come back later.",
 });
 
 // A example of a function that utilises the battery callback
@@ -32,6 +34,8 @@ function yourFunction(){
         // RUN YOUR CODE HERE
     }, this);
 }
+
+### Demo
 
 // Just a normal click event listener
 document.getElementById('id').addEventListener('click', yourFunction , false);
