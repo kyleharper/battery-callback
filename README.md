@@ -1,18 +1,37 @@
 Battery Callback
 ================
 
-Trigger a notification based on the users battery level.
+## Battery Callback allows you to trigger JS functionality with the users battery charge in mind.
 
-## Options
-- "batteryLevel" (Integer): Battery level to trigger alert
-- "title" (String): Text within the message
-- "message" (String): Text within the message
-- "useDefaultMsg" (Bool): Usage of the default confirm/alert message (true = native message)
-- "storeChoice" (String): Retain choice by user when they choose accept or cancel (choices = "confirm", "cancel", "all")
+When conditionally loading content you may want to check if the users battery charge is high enough to handle the content you're embeding. If their battery is low you may want user confirmation before they dive into content that could eat away at their battery and make their device unusable.
 
-## Process
-- Gather battery level
-- When functionality invoked;
- - Check to see if user has chosen to either confirm or cancel before (and run based on previously selected option - and check against the option "storeChoice" e.g. if "storeChoice" = "confirm" then only check if the user has selected "confirm" before)
- - If battery is lower than option "batteryLevel" either - append HTML and show message or open alert. This will include the constructing of event listeners on the confirm or cancel button
- - If the battery is equal or higher than "batteryLevel" then run the callback
+### Configuration
+* `batteryThreshold` (Int) Battery level to trigger alert (Default: 0.1)
+* `msgTitle` (String) Warning message title (Default: "Warning: Your battery is low")
+* `message` (String) Warning message text (Default: "It seems that your battery is quite low. Are you sure you wish view this map? If not you could always come back later.")
+* `confirmButtonText` (String) Confirm button text (Default: "")
+* `cancelButtonText` (String) Cancel button text (Default: "")
+* `useNativeAlert` (Bool) Usage of the default browser confirm message (Default: false)
+* `storeInput` (Bool) Store the users 'confirmed' choice (Default: true)
+* `executeOnFailure` (Bool) If the battery check fails (API may not be supported) then execute the functionality anyways (Default: true)
+* `activeDelay` (Int) The time before a 'active' class is added to the message, which helps with animation the message if required (Default: 200)
+
+```javascript
+// Construct
+var AppBatteryCallback = new BatteryCallback({
+    "batteryThreshold": 0.2,
+    "msgTitle": "Your battery is low!",
+    "message": "It seems that your battery is quite low. Are you sure you wish view this map? If not you could always come back later.",
+    "useNativeAlert": false
+});
+
+// A example of a function that utilises the battery callback
+function yourFunction(){
+    AppBatteryCallback.checkBattery(function(){
+        // RUN YOUR CODE HERE
+    }, this);
+}
+
+// Just a normal click event listener
+document.getElementById('js-clear').addEventListener('click', yourFunction , false);
+```
