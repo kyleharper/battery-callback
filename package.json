@@ -1,0 +1,23 @@
+{
+  "name": "battery-callback",
+  "version": "0.1",
+  "description": "A battery power level based callback manager. Execute functionality if a device has enough power.",
+  "main": "battery-callback.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyleshrives/battery-callback.git"
+  },
+  "keywords": [
+    "Battery",
+    "API"
+  ],
+  "author": "Kyle Shrives <kyle@kyleshrives.co.uk> (http://kyleshrives.co.uk)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kyleshrives/battery-callback/issues"
+  },
+  "homepage": "https://github.com/kyleshrives/battery-callback#readme"
+}
