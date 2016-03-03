@@ -3,7 +3,7 @@ Battery Callback
 
 ## Battery Callback allows you to trigger JS functionality with the users battery charge in mind.
 
-When conditionally loading content you may want to check if the users battery charge is high enough to handle the content you're embeding. If their battery is low you may want user confirmation before they dive into content that could eat away at their battery and make their device unusable.
+When conditionally loading content you may want to check if the users battery charge is high enough to handle the content you're embedding. If their battery is low you may want user confirmation before they dive into content that could eat away at their battery making their device unusable.
 
 ### Configuration
 * `batteryThreshold` (Int) Battery level to trigger alert (Default: 0.1)
@@ -17,22 +17,26 @@ When conditionally loading content you may want to check if the users battery ch
 * `activeDelay` (Int) The time before a 'active' class is added to the message, which helps with animation the message if required (Default: 200)
 
 ### Methods
-* `checkBattery` (parameters: {function} callback to call, {node} The node in which is used to constuct the message)
+* `checkBattery` (parameters: {function} callback to call, {node} The node in which is used to construct the message)
 * `clearChoiceStored` clears user choice stored
-* `destroyMessage` destorys/removes all messages
+* `destroyMessage` destroys/removes all messages
 
 There are other methods but really they shouldn't be touched. I recommend that you only stick to the three above.
 
-### Example
+### Installation
+`npm install —save battery-callback`
+
+### Usage
 ```javascript
-// Construct
+// Require & Construct
+var batteryCallback = require(‘battery-callback’);
 var AppBatteryCallback = new BatteryCallback({
     "batteryThreshold": 0.2,
     "msgTitle": "Your battery is low!",
     "message": "It seems that your battery is quite low. Are you sure you wish view this content?",
 });
 
-// A example of a function that utilises the battery callback
+// An example of a function that utilises the battery callback
 function yourFunction(){
     // Runs the "checkBattery" method
     AppBatteryCallback.checkBattery(function(){
@@ -40,11 +44,5 @@ function yourFunction(){
     }, this);
 }
 
-// Just a normal click event listener
 document.getElementById('id').addEventListener('click', yourFunction , false);
 ```
-
-### Demo
-You can see a demo live on ecliptik.co.uk;
-
-http://www.ecliptik.co.uk/demos/battery-callback/basic.html
