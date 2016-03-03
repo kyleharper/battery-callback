@@ -1,6 +1,6 @@
 {
   "name": "battery-callback",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "A battery power level based callback manager. Execute functionality if a device has enough power.",
   "main": "battery-callback.js",
   "scripts": {
