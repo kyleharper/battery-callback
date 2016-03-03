@@ -29,16 +29,17 @@ There are other methods but really they shouldn't be touched. I recommend that y
 ### Usage
 ```javascript
 // Require & Construct
-var batteryCallback = require(‘battery-callback’);
+var batteryCallback = require('battery-callback');
+
 var AppBatteryCallback = new BatteryCallback({
-    "batteryThreshold": 0.2,
-    "msgTitle": "Your battery is low!",
-    "message": "It seems that your battery is quite low. Are you sure you wish view this content?",
+    'batteryThreshold': 0.2,
+    'msgTitle': 'Your battery is low!',
+    'message': 'It seems that your battery is quite low. Are you sure you wish view this content?',
 });
 
 // An example of a function that utilises the battery callback
 function yourFunction(){
-    // Runs the "checkBattery" method
+    // Runs the 'checkBattery' method
     AppBatteryCallback.checkBattery(function(){
         // RUN YOUR CODE HERE
     }, this);
