@@ -23,16 +23,20 @@ When conditionally loading content you may want to check if the users battery ch
 
 There are other methods but really they shouldn't be touched. I recommend that you only stick to the three above.
 
-### Example
+### Installation
+`npm install —save battery-callback`
+
+### Usage
 ```javascript
-// Construct
+// Require & Construct
+var batteryCallback = require(‘battery-callback’);
 var AppBatteryCallback = new BatteryCallback({
     "batteryThreshold": 0.2,
     "msgTitle": "Your battery is low!",
     "message": "It seems that your battery is quite low. Are you sure you wish view this content?",
 });
 
-// A example of a function that utilises the battery callback
+// An example of a function that utilises the battery callback
 function yourFunction(){
     // Runs the "checkBattery" method
     AppBatteryCallback.checkBattery(function(){
@@ -40,6 +44,5 @@ function yourFunction(){
     }, this);
 }
 
-// Just a normal click event listener
 document.getElementById('id').addEventListener('click', yourFunction , false);
 ```
